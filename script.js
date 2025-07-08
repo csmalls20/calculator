@@ -1,6 +1,7 @@
 let firstNum = '';
 let secondNum = '';
 let operator;
+let result;
 const calcButton = document.querySelectorAll('.calcButton');
 const display = document.querySelector('.display');
 const equalButton = document.querySelector('.equal');
@@ -19,7 +20,7 @@ function multiply(num1, num2) {
 }
 
 function divide(num1, num2) {
-  return num1 / num2;
+  return num2 === 0 ? 'Undefined' : num1 / num2;
 }
 
 function operate(operator, num1, num2) {
@@ -47,6 +48,7 @@ function clearDisplay() {
   firstNum = '';
   secondNum = '';
   operator = '';
+  result = '';
 }
 
 function updateDisplay(button) {
@@ -57,7 +59,7 @@ function updateDisplay(button) {
 
 function assignValues(value) {
   if(value !== '+' && value !== '-' && value !== '*' && value !== '/') {
-      if (!operator) {
+      if (!operator && !firstNum) {
         firstNum += value
       }
       else {
@@ -76,6 +78,14 @@ calcButton.forEach(button => {
 clearButton.addEventListener('click', clearDisplay);
 
 equalButton.addEventListener('click', () => {
-  const result = operate(operator, firstNum, secondNum);
-  display.textContent = result;
+  if (!firstNum || !operator || !secondNum) {
+    return display.textContent;
+  }
+  else {
+    result = operate(operator, firstNum, secondNum);
+    display.textContent = result;
+    firstNum = result;
+    secondNum = '';
+    operator = '';
+  }
 });
