@@ -59,16 +59,23 @@ function updateDisplay(button) {
 
 function assignValues(value) {
   if(value !== '+' && value !== '-' && value !== '*' && value !== '/') {
-      if (!operator && !firstNum) {
+      if (!operator) {
         firstNum += value
       }
       else {
         secondNum += value;
       }
     }
-    else {
-      operator = value;
-    }
+  else if (firstNum && operator && secondNum && (value === '+' || value === '-' || value === '*' || value === '/')) {
+    firstNum = operate(operator, firstNum, secondNum);
+    display.textContent = firstNum + value;
+    operator = value;
+    secondNum = '';
+
+  }
+  else {
+    operator = value;
+  }
 }
 
 calcButton.forEach(button => {
