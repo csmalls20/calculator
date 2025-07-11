@@ -2,10 +2,11 @@ let firstNum = '';
 let secondNum = '';
 let operator;
 let result;
-const calcButton = document.querySelectorAll('.calcButton');
 const display = document.querySelector('.display');
+const calcButton = document.querySelectorAll('.calcButton');
 const equalButton = document.querySelector('.equal');
 const clearButton = document.querySelector('.clear');
+const decimalButton = document.querySelector('.decimal');
 
 function add(num1, num2) {
   return num1 + num2;
@@ -58,22 +59,35 @@ function updateDisplay(button) {
 }
 
 function assignValues(value) {
-  if(value !== '+' && value !== '-' && value !== '*' && value !== '/') {
-      if (!operator) {
-        firstNum += value
-      }
-      else {
-        secondNum += value;
-      }
+  //Clear result if new number pressed
+  if (result && (value !== '+' && value !== '-' && value !== '*' && value !== '/')) {
+    clearDisplay();
+    firstNum = value;
+    display.textContent = value;
+  }
+  // Check for an operator and assign numbers
+  else if(value !== '+' && value !== '-' && value !== '*' && value !== '/') {
+    if (!operator) {
+      firstNum += value
     }
+    else {
+      secondNum += value;
+    }
+  }
+  //Check for first pair of numbers and evaluate
   else if (firstNum && operator && secondNum && (value === '+' || value === '-' || value === '*' || value === '/')) {
     firstNum = operate(operator, firstNum, secondNum);
     display.textContent = firstNum + value;
     operator = value;
     secondNum = '';
-
+  }
+  //Check for consecutive operators
+  else if (firstNum && operator && (value === '+' || value === '-' || value === '*' || value === '/')) {
+    operator = value;
+    display.textContent = firstNum + value;
   }
   else {
+    result = '';
     operator = value;
   }
 }
@@ -82,14 +96,17 @@ calcButton.forEach(button => {
   button.addEventListener('click', updateDisplay);
 });
 
+decimalButton.addEventListener('click', updateDisplay);
+
 clearButton.addEventListener('click', clearDisplay);
 
 equalButton.addEventListener('click', () => {
+  //Check if equal button is pressed before values are assigned
   if (!firstNum || !operator || !secondNum) {
     return display.textContent;
   }
   else {
-    result = operate(operator, firstNum, secondNum);
+    result = Math.round(operate(operator, firstNum, secondNum) * 10000) / 10000;
     display.textContent = result;
     firstNum = result;
     secondNum = '';
