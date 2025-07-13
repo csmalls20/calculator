@@ -6,7 +6,6 @@ const display = document.querySelector('.display');
 const calcButton = document.querySelectorAll('.calcButton');
 const equalButton = document.querySelector('.equal');
 const clearButton = document.querySelector('.clear');
-const decimalButton = document.querySelector('.decimal');
 
 function add(num1, num2) {
   return num1 + num2;
@@ -53,7 +52,14 @@ function clearDisplay() {
 }
 
 function updateDisplay(button) {
-  let buttonValue = button.target.textContent;
+  const buttonValue = button.target.textContent;
+
+  //Check for multiple decimals in values
+  if(buttonValue === '.') {
+    if (firstNum.toString().includes('.') && !operator) return;
+    if (operator && secondNum.toString().includes('.')) return;
+  }
+
   display.textContent += buttonValue;
   assignValues(buttonValue);
 }
@@ -95,8 +101,6 @@ function assignValues(value) {
 calcButton.forEach(button => {
   button.addEventListener('click', updateDisplay);
 });
-
-decimalButton.addEventListener('click', updateDisplay);
 
 clearButton.addEventListener('click', clearDisplay);
 
