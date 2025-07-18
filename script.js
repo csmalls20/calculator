@@ -6,6 +6,7 @@ const display = document.querySelector('.display');
 const calcButton = document.querySelectorAll('.calcButton');
 const equalButton = document.querySelector('.equal');
 const clearButton = document.querySelector('.clear');
+const deleteButton = document.querySelector('.delete');
 
 function add(num1, num2) {
   return num1 + num2;
@@ -49,6 +50,20 @@ function clearDisplay() {
   secondNum = '';
   operator = '';
   result = '';
+}
+
+function deleteInput() {
+  display.textContent = display.textContent.slice(0, -1);
+
+  if (!operator) {
+    firstNum = firstNum.slice(0, -1);
+  }
+  else if (operator && !secondNum) {
+    operator = operator.slice(0, -1);
+  }
+  else {
+    secondNum = secondNum.slice(0, -1);
+  }
 }
 
 function updateDisplay(button) {
@@ -103,6 +118,8 @@ calcButton.forEach(button => {
 });
 
 clearButton.addEventListener('click', clearDisplay);
+
+deleteButton.addEventListener('click', deleteInput);
 
 equalButton.addEventListener('click', () => {
   //Check if equal button is pressed before values are assigned
