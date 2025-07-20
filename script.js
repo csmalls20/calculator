@@ -35,10 +35,10 @@ function operate(operator, num1, num2) {
     case '-':
       return subtract(num1, num2);
       break;
-    case '*':
+    case 'x':
       return multiply(num1, num2);
       break;
-    case '/':
+    case '÷':
       return divide(num1, num2);
       break;
   }
@@ -66,9 +66,7 @@ function deleteInput() {
   }
 }
 
-function updateDisplay(button) {
-  const buttonValue = button.target.textContent;
-
+function updateDisplay(buttonValue) {
   //Check for multiple decimals in values
   if(buttonValue === '.') {
     if (firstNum.toString().includes('.') && !operator) return;
@@ -81,13 +79,13 @@ function updateDisplay(button) {
 
 function assignValues(value) {
   //Clear result if new number pressed
-  if (result && (value !== '+' && value !== '-' && value !== '*' && value !== '/')) {
+  if (result && (value !== '+' && value !== '-' && value !== 'x' && value !== '÷')) {
     clearDisplay();
     firstNum = value;
     display.textContent = value;
   }
   // Check for an operator and assign numbers
-  else if(value !== '+' && value !== '-' && value !== '*' && value !== '/') {
+  else if(value !== '+' && value !== '-' && value !== 'x' && value !== '÷') {
     if (!operator) {
       firstNum += value
     }
@@ -96,14 +94,14 @@ function assignValues(value) {
     }
   }
   //Check for first pair of numbers and evaluate
-  else if (firstNum && operator && secondNum && (value === '+' || value === '-' || value === '*' || value === '/')) {
+  else if (firstNum && operator && secondNum && (value === '+' || value === '-' || value === 'x' || value === '÷')) {
     firstNum = operate(operator, firstNum, secondNum);
     display.textContent = firstNum + value;
     operator = value;
     secondNum = '';
   }
   //Check for consecutive operators
-  else if (firstNum && operator && (value === '+' || value === '-' || value === '*' || value === '/')) {
+  else if (firstNum && operator && (value === '+' || value === '-' || value === 'x' || value === '÷')) {
     operator = value;
     display.textContent = firstNum + value;
   }
@@ -114,7 +112,9 @@ function assignValues(value) {
 }
 
 calcButton.forEach(button => {
-  button.addEventListener('click', updateDisplay);
+  button.addEventListener('click', () => {
+    updateDisplay(button.textContent);
+  });
 });
 
 clearButton.addEventListener('click', clearDisplay);
@@ -124,7 +124,7 @@ deleteButton.addEventListener('click', deleteInput);
 equalButton.addEventListener('click', () => {
   //Check if equal button is pressed before values are assigned
   if (!firstNum || !operator || !secondNum) {
-    return display.textContent;
+    return;
   }
   else {
     result = Math.round(operate(operator, firstNum, secondNum) * 10000) / 10000;
@@ -132,5 +132,43 @@ equalButton.addEventListener('click', () => {
     firstNum = result;
     secondNum = '';
     operator = '';
+  }
+});
+
+//Allow for keyboard support
+document.addEventListener('keydown', (event) => {
+  const acceptableValues = '.1234567890+-';
+
+  //Check for appropriate values
+  switch (event.key) {
+    case 'Enter':
+      if (!firstNum || !operator || !secondNum) {
+      return;
+    }
+    else {
+      result = Math.round(operate(operator, firstNum, secondNum) * 10000) / 10000;
+      display.textContent = result;
+      firstNum = result;
+      secondNum = '';
+      operator = '';
+    }
+      break;
+    case 'Backspace':
+      deleteInput();
+      break;
+    case '*':
+      updateDisplay('x');
+      break;
+    case '/':
+      updateDisplay('÷');
+      break;
+    default:
+      if (!acceptableValues.includes(event.key)) {
+        return;
+      }
+      else {
+        updateDisplay(event.key);
+        break;
+      }
   }
 });
