@@ -56,7 +56,7 @@ function deleteInput() {
   display.textContent = display.textContent.slice(0, -1);
 
   if (!operator) {
-    firstNum = firstNum.slice(0, -1);
+    firstNum = firstNum.toString().slice(0, -1);
   }
   else if (operator && !secondNum) {
     operator = operator.slice(0, -1);
