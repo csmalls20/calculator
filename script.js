@@ -35,7 +35,7 @@ function operate(operator, num1, num2) {
     case '-':
       return subtract(num1, num2);
       break;
-    case 'x':
+    case '×':
       return multiply(num1, num2);
       break;
     case '÷':
@@ -79,13 +79,13 @@ function updateDisplay(buttonValue) {
 
 function assignValues(value) {
   //Clear result if new number pressed
-  if (result && (value !== '+' && value !== '-' && value !== 'x' && value !== '÷')) {
+  if (result && (value !== '+' && value !== '-' && value !== '×' && value !== '÷')) {
     clearDisplay();
     firstNum = value;
     display.textContent = value;
   }
   // Check for an operator and assign numbers
-  else if(value !== '+' && value !== '-' && value !== 'x' && value !== '÷') {
+  else if(value !== '+' && value !== '-' && value !== '×' && value !== '÷') {
     if (!operator) {
       firstNum += value
     }
@@ -94,14 +94,14 @@ function assignValues(value) {
     }
   }
   //Check for first pair of numbers and evaluate
-  else if (firstNum && operator && secondNum && (value === '+' || value === '-' || value === 'x' || value === '÷')) {
+  else if (firstNum && operator && secondNum && (value === '+' || value === '-' || value === '×' || value === '÷')) {
     firstNum = operate(operator, firstNum, secondNum);
     display.textContent = firstNum + value;
     operator = value;
     secondNum = '';
   }
   //Check for consecutive operators
-  else if (firstNum && operator && (value === '+' || value === '-' || value === 'x' || value === '÷')) {
+  else if (firstNum && operator && (value === '+' || value === '-' || value === '×' || value === '÷')) {
     operator = value;
     display.textContent = firstNum + value;
   }
@@ -156,8 +156,11 @@ document.addEventListener('keydown', (event) => {
     case 'Backspace':
       deleteInput();
       break;
+    case '-':
+      updateDisplay('-')
+      break;
     case '*':
-      updateDisplay('x');
+      updateDisplay('×');
       break;
     case '/':
       updateDisplay('÷');

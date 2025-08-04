@@ -30,6 +30,7 @@ body {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  letter-spacing: 4px;
   font-size: 45px;
   margin-bottom: 24px;
 }
